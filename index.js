@@ -22,13 +22,14 @@ async function run() {
         const productsCollection = client.db('TireX').collection('products');
         const categoryCollection = client.db('TireX').collection('categories');
 
-        // get products collection
+        // products collection loaded
         app.get('/categories', async (req, res) => {
             const query = {};
             const categories = await categoryCollection.find(query).toArray();
             res.send(categories);
         });
 
+        // individual category data loaded
         app.get('/category/:id', async (req, res) => {
             const id = req.params.id;
             const query = { categoryId: id };
