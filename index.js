@@ -32,6 +32,27 @@ async function run() {
             res.send(result);
         });
 
+        //all sellers----------------------------------------------------
+        app.get('/allsellers', async (req, res) => {
+            const userType = "Seller";
+            const query = { userType: userType }
+            const result = await usersCollection.find(query).toArray();
+            res.send(result);
+        });
+        //all buyers----------------------------------------------------
+        app.get('/allbuyers', async (req, res) => {
+            const userType = "Buyer";
+            const query = { userType: userType }
+            const result = await usersCollection.find(query).toArray();
+            res.send(result);
+        });
+
+        app.get('/users/admin/:id', async (req, res) => {
+            const query = {};
+            const user = await usersCollection.find(query);
+            res.send({ isAdmin: user?.userType === 'Admin' });
+        });
+
         //bookings collection
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
