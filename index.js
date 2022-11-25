@@ -21,6 +21,17 @@ async function run() {
         // database collection
         const productsCollection = client.db('TireX').collection('products');
         const categoryCollection = client.db('TireX').collection('categories');
+        const bookingsCollection = client.db('TireX').collection('bookings');
+
+
+
+        //bookings collection
+        app.post('/bookings', async (req, res) => {
+            const booking = req.body;
+            console.log(booking);
+            const result = await bookingsCollection.insertOne(booking);
+            res.send(result);
+        });
 
         // products collection loaded
         app.get('/categories', async (req, res) => {
