@@ -28,7 +28,18 @@ async function run() {
         //bookings collection
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
-            console.log(booking);
+
+            // user cannot book multiple item on same date
+            const query = {
+                bookingDate: booking.bookingDate,
+                userEmail: booking.userEmail
+            }
+            const alreadyBooking = await bookingsCollection.find(query).toArray();
+            if (alreadyBooking.length) {
+                const message = `You already booked on ${booking.bookingDate}`
+                return res.send({ acknowledged: false, message })
+            }
+
             const result = await bookingsCollection.insertOne(booking);
             res.send(result);
         });
