@@ -22,13 +22,19 @@ async function run() {
         const productsCollection = client.db('TireX').collection('products');
         const categoryCollection = client.db('TireX').collection('categories');
         const bookingsCollection = client.db('TireX').collection('bookings');
+        const usersCollection = client.db('TireX').collection('users');
 
 
+        // usersCollection
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+        });
 
         //bookings collection
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
-
             // user cannot book multiple item on same date
             const query = {
                 bookingDate: booking.bookingDate,
@@ -46,7 +52,7 @@ async function run() {
 
         app.get('/bookings', async (req, res) => {
             const email = req.query.email;
-            const query = {userEmail: email};
+            const query = { userEmail: email };
             const bookings = await bookingsCollection.find(query).toArray();
             res.send(bookings);
         });
@@ -65,6 +71,8 @@ async function run() {
             const category = await productsCollection.find(query).toArray();
             res.send(category);
         });
+
+
 
     }
     finally {
