@@ -47,11 +47,19 @@ async function run() {
             res.send(result);
         });
 
+        //admin
         app.get('/users/admin/:email', async (req, res) => {
             const email = req.params.email;
             const query = {email};
             const user = await usersCollection.findOne(query);
             res.send({ isAdmin: user?.userType === 'Admin' });
+        });
+        // buyer
+        app.get('/users/buyer/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = {email};
+            const user = await usersCollection.findOne(query);
+            res.send({ isBuyer: user?.userType === 'Buyer' });
         });
 
         //bookings collection
