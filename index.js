@@ -50,17 +50,34 @@ async function run() {
         //admin
         app.get('/users/admin/:email', async (req, res) => {
             const email = req.params.email;
-            const query = {email};
+            const query = { email };
             const user = await usersCollection.findOne(query);
             res.send({ isAdmin: user?.userType === 'Admin' });
         });
         // buyer
         app.get('/users/buyer/:email', async (req, res) => {
             const email = req.params.email;
-            const query = {email};
+            const query = { email };
             const user = await usersCollection.findOne(query);
             res.send({ isBuyer: user?.userType === 'Buyer' });
         });
+
+        // delete buyer
+        app.delete('/buyers/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await usersCollection.deleteOne(filter);
+            res.send(result);
+        });
+
+        // delete seller
+        app.delete('/sellers/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await usersCollection.deleteOne(filter);
+            res.send(result);
+        });
+
 
         //bookings collection
         app.post('/bookings', async (req, res) => {
@@ -80,11 +97,26 @@ async function run() {
             res.send(result);
         });
 
+        // get specific booking
+        app.get('/booking/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const booking = await bookingsCollection.findOne(query);
+            res.send(booking);
+
+        });
+
         app.get('/bookings', async (req, res) => {
             const email = req.query.email;
             const query = { userEmail: email };
             const bookings = await bookingsCollection.find(query).toArray();
             res.send(bookings);
+        });
+
+        app.get('/allbookings', async (req, res) => {
+            const query = {};
+            const result = await bookingsCollection.find(query).toArray();
+            res.send(result)
         });
 
         // products collection loaded
