@@ -36,8 +36,6 @@ async function run() {
             res.send(result);
         });
 
-
-
          //payment
          app.post('/create-payment-intent', async (req, res) => {
             const orders = req.body;
