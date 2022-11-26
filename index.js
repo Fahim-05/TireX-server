@@ -3,6 +3,7 @@ const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 require('dotenv').config();
+const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 const app = express();
 
@@ -23,6 +24,40 @@ async function run() {
         const categoryCollection = client.db('TireX').collection('categories');
         const bookingsCollection = client.db('TireX').collection('bookings');
         const usersCollection = client.db('TireX').collection('users');
+        const paymentsCollection = client.db('TireX').collection('payments');
+
+
+
+
+        //payments collection
+        app.post('/payments', async (req, res) => {
+            const payment = req.body;
+            const result = await paymentsCollection.insertOne(payment);
+            res.send(result);
+        });
+
+
+
+         //payment
+         app.post('/create-payment-intent', async (req, res) => {
+            const orders = req.body;
+            const price = orders.resalePrice;
+            console.log(price)
+            const amount = price * 100;
+
+            const paymentIntent = await stripe.paymentIntents.create({
+                currency: 'usd',
+                amount: amount,
+                "payment_method_types": [
+                    "card"
+                ]
+            })
+            res.send({
+                clientSecret: paymentIntent.client_secret
+            })
+        });
+
+
 
 
         // usersCollection
@@ -133,6 +168,9 @@ async function run() {
             const category = await productsCollection.find(query).toArray();
             res.send(category);
         });
+
+
+       
 
 
 
