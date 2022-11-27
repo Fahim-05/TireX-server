@@ -29,6 +29,14 @@ async function run() {
 
 
 
+        // product add
+        app.post('/products', async (req, res) => {
+            const product = req.body;
+            const result = await productsCollection.insertOne(product);
+            res.send(result);
+        });
+
+
         //payments collection
         app.post('/payments', async (req, res) => {
             const payment = req.body;
@@ -74,6 +82,7 @@ async function run() {
             res.send(result);
         });
 
+
         //all sellers----------------------------------------------------
         app.get('/allsellers', async (req, res) => {
             const userType = "Seller";
@@ -103,6 +112,14 @@ async function run() {
             const user = await usersCollection.findOne(query);
             res.send({ isBuyer: user?.userType === 'Buyer' });
         });
+        // seller
+        app.get('/users/seller/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await usersCollection.findOne(query);
+            res.send({ isSeller: user?.userType === 'Seller' });
+        });
+
 
         // delete buyer
         app.delete('/buyers/:id', async (req, res) => {
