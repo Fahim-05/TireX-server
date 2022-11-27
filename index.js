@@ -27,8 +27,6 @@ async function run() {
         const paymentsCollection = client.db('TireX').collection('payments');
 
 
-
-
         // product add
         app.post('/products', async (req, res) => {
             const product = req.body;
