@@ -145,6 +145,20 @@ async function run() {
             res.send(result);
         });
 
+        //verify seller
+        app.patch('/verifySeller/:email', async (req, res) => {
+            const email = req.params.email;
+            const filter = { email};
+            const updatedDoc = {
+                $set: {
+                    sellerStatus: true
+                }
+            }
+            const updateSeller = await usersCollection.updateOne(filter, updatedDoc);
+            const result = await productsCollection.updateMany(filter, updatedDoc);
+            res.send(result);
+        });
+
 
         //bookings collection
         app.post('/bookings', async (req, res) => {
