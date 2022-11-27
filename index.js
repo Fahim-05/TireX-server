@@ -38,7 +38,7 @@ async function run() {
 
         app.get('/products/:email', async (req, res) => {
             const email = req.params.email;
-            const query = {email}
+            const query = { email }
             const result = await productsCollection.find(query).toArray();
             res.send(result);
         });
@@ -50,12 +50,16 @@ async function run() {
             const result = await paymentsCollection.insertOne(payment);
             const id = payment.orderId;
             const filter = { _id: ObjectId(id) };
+            const productId = payment.productId;
+            const query = { _id: ObjectId(productId) };
+
             const updatedDoc = {
                 $set: {
                     paid: true,
                     transactionId: payment.transactionId
                 }
             }
+            const deleteProduct = await productsCollection.deleteOne(query);
             const updatedResult = await bookingsCollection.updateOne(filter, updatedDoc);
             res.send(result);
         });
@@ -65,7 +69,6 @@ async function run() {
         app.post('/create-payment-intent', async (req, res) => {
             const orders = req.body;
             const price = orders.resalePrice;
-            console.log(price)
             const amount = price * 100;
 
             const paymentIntent = await stripe.paymentIntents.create({
@@ -148,7 +151,7 @@ async function run() {
         //verify seller
         app.patch('/verifySeller/:email', async (req, res) => {
             const email = req.params.email;
-            const filter = { email};
+            const filter = { email };
             const updatedDoc = {
                 $set: {
                     sellerStatus: true
