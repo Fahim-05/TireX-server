@@ -36,6 +36,13 @@ async function run() {
             res.send(result);
         });
 
+        app.get('/products/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = {email}
+            const result = await productsCollection.find(query).toArray();
+            res.send(result);
+        });
+
 
         //payments collection
         app.post('/payments', async (req, res) => {
@@ -52,6 +59,7 @@ async function run() {
             const updatedResult = await bookingsCollection.updateOne(filter, updatedDoc);
             res.send(result);
         });
+
 
         //payment
         app.post('/create-payment-intent', async (req, res) => {
