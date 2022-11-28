@@ -231,8 +231,6 @@ run().catch(console.log);
 
 
 
-
-
 //check that server is running
 app.get('/', async (req, res) => { res.send('TrieX server is running'); })
 app.listen(port, () => console.log(`TireX server is running on ${port}`));
