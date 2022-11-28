@@ -7,3 +7,4 @@ Server Vercel link :
 1. Details:
 
     * Send data to client site to access from client site
+    * MongoDB CRUD operations are available in this server
